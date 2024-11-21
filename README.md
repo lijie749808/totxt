@@ -1,16 +1,18 @@
 # ToTxt
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 A modern web application for converting various file types to text, with a primary focus on efficient PDF text extraction.
 
 ## Features
 
-- 📄 PDF Text Extraction
+- PDF Text Extraction
   - Efficient text extraction using PDF.js
   - Support for multi-page documents
   - Page numbering and formatting
   - Progress tracking during conversion
 
-- 📝 Additional File Support (Coming Soon)
+- Additional File Support (Coming Soon)
   - Microsoft Word documents (.docx)
   - Excel spreadsheets (.xlsx)
   - Images (OCR support)

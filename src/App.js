@@ -1,16 +1,33 @@
 import React from 'react';
-import FileUploader from './components/FileUploader';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
+import { AuthProvider } from './contexts/AuthContext';
+import MainLayout from './layouts/MainLayout';
+import Home from './pages/Home';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import VerifyEmail from './pages/Auth/VerifyEmail';
+import Features from './pages/Features';
+import Documentation from './pages/Documentation';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          ToTxt File Converter
-        </h1>
-        <FileUploader />
-      </div>
-    </div>
+    <ChakraProvider>
+      <AuthProvider>
+        <Router>
+          <MainLayout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/features" element={<Features />} />
+              <Route path="/docs" element={<Documentation />} />
+            </Routes>
+          </MainLayout>
+        </Router>
+      </AuthProvider>
+    </ChakraProvider>
   );
 }
 

@@ -18,10 +18,86 @@
   - 图片（OCR 支持）
   - Markdown 文件
 
+## 项目结构
+
+```
+totxt/
+├── public/              # 静态文件
+│   ├── index.html
+│   └── manifest.json
+├── src/
+│   ├── components/      # React 组件
+│   │   ├── FileUploader.js
+│   │   └── ConversionProgress.js
+│   ├── layouts/         # 布局组件
+│   │   ├── MainLayout.js
+│   │   ├── Navbar.js
+│   │   └── Footer.js
+│   ├── pages/          # 页面组件
+│   │   ├── Home.js     # 首页
+│   │   ├── Features.js # 功能页面
+│   │   ├── Docs.js    # 文档
+│   │   └── User/      # 用户相关页面
+│   ├── services/       # 业务逻辑
+│   │   └── conversionService.js
+│   ├── styles/         # CSS 样式
+│   │   └── custom.css
+│   ├── utils/          # 工具函数
+│   │   └── fileUtils.js
+│   └── workers/        # Web Workers
+│       └── pdf.worker.js
+└── scripts/            # 构建脚本
+    └── copy-worker.js
+```
+
+## 核心模块
+
+### 1. 布局组件
+- **导航栏**
+  * Logo 和品牌
+  * 导航菜单
+  * 主题切换（明/暗）
+  * 语言选择器
+  * 用户菜单/登录按钮
+- **页脚**
+  * 版权信息
+  * 社交媒体链接
+  * 联系方式
+
+### 2. 主要功能
+- **首页**
+  * 功能亮点
+  * 快速入门指南
+  * 使用统计
+- **功能页面**
+  * 文件转换界面
+  * 转换历史记录
+  * 批量处理
+- **文档中心**
+  * 用户指南
+  * API 文档
+  * 常见问题
+
+### 3. 用户系统（即将推出）
+- **认证**
+  * 登录/注册
+  * OAuth 集成
+  * 密码重置
+- **用户中心**
+  * 个人资料管理
+  * 使用记录
+  * 设置
+
+### 4. 辅助功能
+- 搜索功能
+- 通知系统
+- 帮助中心
+- 错误页面（404、500）
+
 ## 技术栈
 
 - 前端框架：React
-- UI 框架：Tailwind CSS
+- UI 框架：Chakra UI
 - PDF 处理：PDF.js
 - 文档处理：
   - Mammoth.js (Word)
@@ -64,20 +140,6 @@ npm start
 
 ## 开发指南
 
-### 项目结构
-
-```
-totxt/
-├── public/
-├── src/
-│   ├── components/      # React 组件
-│   ├── services/        # 业务逻辑
-│   ├── styles/          # CSS 样式
-│   ├── utils/           # 工具函数
-│   └── workers/         # Web Workers
-└── scripts/             # 构建脚本
-```
-
 ### 可用脚本
 
 - `npm start` - 启动开发服务器
@@ -96,5 +158,5 @@ totxt/
 ## 致谢
 
 - [PDF.js](https://mozilla.github.io/pdf.js/) - PDF 渲染引擎
+- [Chakra UI](https://chakra-ui.com/) - UI 组件库
 - [Create React App](https://create-react-app.dev/) - React 应用脚手架
-- [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架

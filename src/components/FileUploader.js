@@ -1,26 +1,53 @@
 import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { isSupportedFileType, formatFileSize } from '../utils/fileUtils';
 import { convertFile } from '../services/conversionService';
 import ConversionProgress from './ConversionProgress';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 
 const FileUploader = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState([]);
   const [progress, setProgress] = useState({});
   const [errors, setErrors] = useState({});
   const [converting, setConverting] = useState({});
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleDragOver = (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      return;
+    }
     setIsDragging(true);
   };
 
   const handleDragLeave = () => {
+    if (!isAuthenticated) {
+      return;
+    }
     setIsDragging(false);
   };
 
   const handleDrop = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      onOpen();
+      return;
+    }
     setIsDragging(false);
     
     const droppedFiles = Array.from(e.dataTransfer.files);
@@ -28,11 +55,19 @@ const FileUploader = () => {
   };
 
   const handleFileInput = async (e) => {
+    if (!isAuthenticated) {
+      onOpen();
+      return;
+    }
     const selectedFiles = Array.from(e.target.files);
     await processFiles(selectedFiles);
   };
 
   const downloadText = (text, fileName) => {
+    if (!isAuthenticated) {
+      onOpen();
+      return;
+    }
     console.log('准备下载文件:', fileName);
     try {
       const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
@@ -56,6 +91,10 @@ const FileUploader = () => {
   };
 
   const processFiles = async (newFiles) => {
+    if (!isAuthenticated) {
+      onOpen();
+      return;
+    }
     console.log('开始处理文件:', newFiles.map(f => f.name));
     const validFiles = newFiles.filter(file => isSupportedFileType(file));
     
@@ -107,6 +146,10 @@ const FileUploader = () => {
   };
 
   const removeFile = useCallback((fileName) => {
+    if (!isAuthenticated) {
+      onOpen();
+      return;
+    }
     console.log('移除文件:', fileName);
     setFiles(prev => prev.filter(f => f.name !== fileName));
     setProgress(prev => {
@@ -124,10 +167,10 @@ const FileUploader = () => {
       delete newConverting[fileName];
       return newConverting;
     });
-  }, []);
+  }, [isAuthenticated, onOpen]);
 
   return (
-    <div className="space-y-4">
+    <>
       <div 
         className={`p-8 border-2 border-dashed rounded-lg text-center cursor-pointer
           ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`}
@@ -192,7 +235,26 @@ const FileUploader = () => {
           )}
         </div>
       ))}
-    </div>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>需要登录</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>请先登录或注册后再使用文件转换功能。</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={() => navigate('/login')}>
+              登录
+            </Button>
+            <Button variant="ghost" onClick={() => navigate('/register')}>
+              注册
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 
